@@ -1,26 +1,46 @@
 import React from 'react';
-import { Button, Image, StyleSheet, Text, View } from 'react-native';
+import {
+  Button,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  TouchableNativeFeedback,
+  Platform,
+  View,
+} from 'react-native';
 import Colors from '../../contstants/Colors';
 
-import Center from '../Center';
-
 const ProductItem = ({ imageUrl, title, price, onViewDetail, onAddToCart }) => {
+  let TouchableCmp = TouchableOpacity;
+
+  if (Platform.OS === 'android' && Platform.Version >= 21) {
+    TouchableCmp = TouchableNativeFeedback;
+  }
   return (
-    <View style={styles.container}>
-      <Image source={{ uri: imageUrl }} style={styles.image} />
-      <View style={styles.textWrapper}>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.price}>${price.toFixed(2)}</Text>
+    <TouchableCmp onPress={onViewDetail} useForeground>
+      <View style={styles.container}>
+        <Image source={{ uri: imageUrl }} style={styles.image} />
+        <View style={styles.infoContainer}>
+          <View style={styles.textWrapper}>
+            <Text style={styles.title}>{title}</Text>
+            <Text style={styles.price}>${price.toFixed(2)}</Text>
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button
+              title="View Details"
+              onPress={onViewDetail}
+              color={Colors.primary}
+            />
+            <Button
+              title="To Cart"
+              onPress={onAddToCart}
+              color={Colors.primary}
+            />
+          </View>
+        </View>
       </View>
-      <View style={styles.buttonContainer}>
-        <Button
-          title="View Details"
-          onPress={onViewDetail}
-          color={Colors.primary}
-        />
-        <Button title="To Cart" onPress={onAddToCart} color={Colors.primary} />
-      </View>
-    </View>
+    </TouchableCmp>
   );
 };
 
@@ -44,9 +64,11 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '60%',
   },
+  infoContainer: {
+    backgroundColor: 'white',
+  },
   textWrapper: {
     alignItems: 'center',
-    height: '15%',
     padding: 10,
   },
   title: {
@@ -59,9 +81,9 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    height: '25%',
+    paddingHorizontal: 20,
   },
 });
 
