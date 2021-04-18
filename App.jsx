@@ -7,13 +7,14 @@ import { useFonts } from 'expo-font';
 import productsReducer from './store/reducers/products';
 import cartReducer from './store/reducers/cart';
 import ProductsStack from './navigation/products/ProductsStack';
+import { composeWithDevTools } from 'redux-devtools-extension';
 
 const rootReducer = combineReducers({
   products: productsReducer,
   cart: cartReducer,
 });
 
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, composeWithDevTools());
 
 export default function App() {
   const [fontLoaded] = useFonts({
