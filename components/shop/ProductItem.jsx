@@ -9,7 +9,7 @@ import {
   Platform,
   View,
 } from 'react-native';
-import Colors from '../../contstants/Colors';
+import Colors from '../../constants/Colors';
 
 const ProductItem = ({ imageUrl, title, price, onViewDetail, onAddToCart }) => {
   let TouchableCmp = TouchableOpacity;

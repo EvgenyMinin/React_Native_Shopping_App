@@ -4,19 +4,17 @@ import { Platform } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { DrawerActions } from '@react-navigation/native';
 
-import ProductsOverviewScreen from '../../screens/shop/ProductsOverviewScreen';
-import ProductDetailScreen from '../../screens/shop/ProductDetailScreen';
-import CartScreen from '../../screens/shop/CartScreen';
+import OrdersScreen from '../../screens/shop/OrdersScreen';
 
 import CustomHeaderButton from '../../components/UI/HeaderButton';
 
 import Colors from '../../constants/Colors';
 
-const ProductStack = createStackNavigator();
+const OrdersStackNavigator = createStackNavigator();
 
-const ProductsStack = () => {
+const OrdersStack = () => {
   return (
-    <ProductStack.Navigator
+    <OrdersStackNavigator.Navigator
       screenOptions={{
         headerStyle: {
           backgroundColor: Platform.OS === 'android' ? Colors.primary : 'white',
@@ -30,9 +28,9 @@ const ProductsStack = () => {
         headerTintColor: Platform.OS === 'android' ? 'white' : Colors.primary,
       }}
     >
-      <ProductStack.Screen
-        name="All Products"
-        component={ProductsOverviewScreen}
+      <OrdersStackNavigator.Screen
+        name="Your Orders"
+        component={OrdersScreen}
         options={({ navigation }) => ({
           headerLeft: () => (
             <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
@@ -45,29 +43,10 @@ const ProductsStack = () => {
               />
             </HeaderButtons>
           ),
-          headerRight: () => (
-            <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-              <Item
-                title="Cart"
-                iconName={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
-                onPress={() => {
-                  navigation.navigate('Cart');
-                }}
-              />
-            </HeaderButtons>
-          ),
         })}
       />
-      <ProductStack.Screen
-        name="Product Detail"
-        component={ProductDetailScreen}
-        options={({ route }) => ({
-          headerTitle: route.params.title,
-        })}
-      />
-      <ProductStack.Screen name="Cart" component={CartScreen} />
-    </ProductStack.Navigator>
+    </OrdersStackNavigator.Navigator>
   );
 };
 
-export default ProductsStack;
+export default OrdersStack;

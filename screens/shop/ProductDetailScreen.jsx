@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
-import Colors from '../../contstants/Colors';
+import Colors from '../../constants/Colors';
 
 import * as cartAction from '../../store/actions/cart';
 
