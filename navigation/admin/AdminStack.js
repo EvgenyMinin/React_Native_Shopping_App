@@ -4,15 +4,15 @@ import { Platform } from 'react-native';
 
 import MenuButton from '../../components/UI/MenuButton';
 
-import OrdersScreen from '../../screens/shop/OrdersScreen';
+import UserProductsScreen from '../../screens/user/UserProductsScreen';
 
 import Colors from '../../constants/Colors';
 
-const OrdersStackNavigator = createStackNavigator();
+const AdminStackNavigator = createStackNavigator();
 
-const OrdersStack = () => {
+const AdminStack = () => {
   return (
-    <OrdersStackNavigator.Navigator
+    <AdminStackNavigator.Navigator
       screenOptions={{
         headerStyle: {
           backgroundColor: Platform.OS === 'android' ? Colors.primary : 'white',
@@ -26,15 +26,15 @@ const OrdersStack = () => {
         headerTintColor: Platform.OS === 'android' ? 'white' : Colors.primary,
       }}
     >
-      <OrdersStackNavigator.Screen
+      <AdminStackNavigator.Screen
         name="Your Orders"
-        component={OrdersScreen}
+        component={UserProductsScreen}
         options={({ navigation }) => ({
           headerLeft: () => <MenuButton navigation={navigation} />,
         })}
       />
-    </OrdersStackNavigator.Navigator>
+    </AdminStackNavigator.Navigator>
   );
 };
 
-export default OrdersStack;
+export default AdminStack;

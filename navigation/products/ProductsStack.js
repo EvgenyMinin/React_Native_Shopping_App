@@ -2,7 +2,8 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Platform } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { DrawerActions } from '@react-navigation/native';
+
+import MenuButton from '../../components/UI/MenuButton';
 
 import ProductsOverviewScreen from '../../screens/shop/ProductsOverviewScreen';
 import ProductDetailScreen from '../../screens/shop/ProductDetailScreen';
@@ -34,17 +35,7 @@ const ProductsStack = () => {
         name="All Products"
         component={ProductsOverviewScreen}
         options={({ navigation }) => ({
-          headerLeft: () => (
-            <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-              <Item
-                title="Menu"
-                iconName={Platform.OS === 'android' ? 'md-menu' : 'ios-menu'}
-                onPress={() => {
-                  navigation.dispatch(DrawerActions.toggleDrawer());
-                }}
-              />
-            </HeaderButtons>
-          ),
+          headerLeft: () => <MenuButton navigation={navigation} />,
           headerRight: () => (
             <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
               <Item

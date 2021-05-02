@@ -14,6 +14,7 @@ import ordersReducer from './store/reducers/orders';
 
 import ProductsStack from './navigation/products/ProductsStack';
 import OrdersStack from './navigation/orders/OrdersStack';
+import AdminStack from './navigation/admin/AdminStack';
 
 import Colors from './constants/Colors';
 import { Platform } from 'react-native';
@@ -54,7 +55,7 @@ export default function App() {
             options={{
               drawerIcon: ({ focused }) => (
                 <Ionicons
-                  name={Platform.OS === 'android' ? 'md-create' : 'ios-create'}
+                  name={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
                   size={23}
                   color={focused ? Colors.primary : '#ccc'}
                 />
@@ -68,6 +69,19 @@ export default function App() {
               drawerIcon: ({ focused }) => (
                 <Ionicons
                   name={Platform.OS === 'android' ? 'md-list' : 'ios-list'}
+                  size={23}
+                  color={focused ? Colors.primary : '#ccc'}
+                />
+              ),
+            }}
+          />
+          <Drawer.Screen
+            name="Admin"
+            component={AdminStack}
+            options={{
+              drawerIcon: ({ focused }) => (
+                <Ionicons
+                  name={Platform.OS === 'android' ? 'md-create' : 'ios-create'}
                   size={23}
                   color={focused ? Colors.primary : '#ccc'}
                 />
