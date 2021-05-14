@@ -1,6 +1,5 @@
 import React from 'react';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { DrawerActions } from '@react-navigation/native';
 
 import CustomHeaderButton from './HeaderButton';
 
@@ -11,7 +10,7 @@ const CreateButton = ({ navigation }) => {
         title="Menu"
         iconName={Platform.OS === 'android' ? 'md-create' : 'ios-create'}
         onPress={() => {
-          navigation.navigate('Edit Product');
+          navigation.navigate('Edit Product', {});
         }}
       />
     </HeaderButtons>
