@@ -3,10 +3,12 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Platform } from 'react-native';
 
 import MenuButton from '../../components/UI/MenuButton';
+import CreateButton from '../../components/UI/CreateButton';
 
 import UserProductsScreen from '../../screens/user/UserProductsScreen';
 
 import Colors from '../../constants/Colors';
+import EditProductScreen from '../../screens/user/EditProductScreen';
 
 const AdminStackNavigator = createStackNavigator();
 
@@ -31,7 +33,13 @@ const AdminStack = () => {
         component={UserProductsScreen}
         options={({ navigation }) => ({
           headerLeft: () => <MenuButton navigation={navigation} />,
+          headerRight: () => <CreateButton navigation={navigation} />,
         })}
+      />
+
+    <AdminStackNavigator.Screen
+        name="Edit Product"
+        component={EditProductScreen}
       />
     </AdminStackNavigator.Navigator>
   );

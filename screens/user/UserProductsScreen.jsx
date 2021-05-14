@@ -7,10 +7,14 @@ import ProductItem from '../../components/shop/ProductItem';
 import Colors from '../../constants/Colors';
 import * as productAction from '../../store/actions/products';
 
-const UserProductsScreen = () => {
+const UserProductsScreen = ({ navigation }) => {
   const userProducts = useSelector((state) => state.products.userProducts);
 
   const dispatch = useDispatch();
+
+  const editProductHandler = (id) => {
+    navigation.navigate('Edit Product', { productId: id });
+  };
 
   return (
     <FlatList
@@ -21,11 +25,11 @@ const UserProductsScreen = () => {
           imageUrl={item.imageUrl}
           title={item.title}
           price={item.price}
-          onSelect={() => {}}
+          onSelect={() => editProductHandler(item.id)}
         >
           <Button
             title="Edit"
-            // onPress={() => selectItemHandler(item.id, item.title)}
+            onPress={() => editProductHandler(item.id)}
             color={Colors.primary}
           />
           <Button
