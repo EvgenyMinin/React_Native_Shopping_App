@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, ScrollView, Text, TextInput, StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -33,6 +33,7 @@ const EditProductScreen = ({ navigation, route }) => {
         productsActions.createProduct(title, imageUrl, +price, description)
       );
     }
+    navigation.goBack();
   };
 
   useEffect(() => {

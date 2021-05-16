@@ -9,6 +9,8 @@ import {
   View,
 } from 'react-native';
 
+import Card from '../UI/Card';
+
 const ProductItem = ({ imageUrl, title, price, onSelect, children }) => {
   let TouchableCmp = TouchableOpacity;
 
