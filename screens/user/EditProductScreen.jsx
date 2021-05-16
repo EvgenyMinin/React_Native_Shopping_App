@@ -1,17 +1,47 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, ScrollView, Text, TextInput, StyleSheet } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
-const EditProductScreen = ({ route }) => {
+import SaveButton from '../../components/UI/SaveButton';
+
+import * as productsActions from '../../store/actions/products';
+
+const EditProductScreen = ({ navigation, route }) => {
   const { productId } = route.params;
   const editedProduct = useSelector((state) =>
     state.products.userProducts.find((prod) => prod.id === productId)
   );
 
+  const dispatch = useDispatch();
+
   const [title, setTitle] = useState(editedProduct ? editedProduct.title : '');
-  const [imageUrl, setImageUrl] = useState(editedProduct ? editedProduct.imageUrl : '');
+  const [imageUrl, setImageUrl] = useState(
+    editedProduct ? editedProduct.imageUrl : ''
+  );
   const [price, setPrice] = useState('');
-  const [description, setDescription] = useState(editedProduct ? editedProduct.description : '');
+  const [description, setDescription] = useState(
+    editedProduct ? editedProduct.description : ''
+  );
+
+  const onSubmit = () => {
+    if (editedProduct) {
+      dispatch(
+        productsActions.updateProduct(productId, title, description, imageUrl)
+      );
+    } else {
+      dispatch(
+        productsActions.createProduct(title, imageUrl, +price, description)
+      );
+    }
+  };
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <SaveButton navigation={navigation} onSubmit={onSubmit} />
+      ),
+    });
+  }, [navigation, title, imageUrl, description, price]);
 
   return (
     <ScrollView>
@@ -21,7 +51,7 @@ const EditProductScreen = ({ route }) => {
           <TextInput
             style={styles.input}
             value={title}
-            onChangeText={(text) => setTitle(text)}
+            onChangeText={setTitle}
           />
         </View>
 
@@ -30,7 +60,7 @@ const EditProductScreen = ({ route }) => {
           <TextInput
             style={styles.input}
             value={imageUrl}
-            onChangeText={(text) => setImageUrl(text)}
+            onChangeText={setImageUrl}
           />
         </View>
 
@@ -40,7 +70,7 @@ const EditProductScreen = ({ route }) => {
             <TextInput
               style={styles.input}
               value={price}
-              onChangeText={(text) => setPrice(text)}
+              onChangeText={setPrice}
             />
           </View>
         )}
@@ -50,7 +80,7 @@ const EditProductScreen = ({ route }) => {
           <TextInput
             style={styles.input}
             value={description}
-            onChangeText={(text) => setDescription(text)}
+            onChangeText={setDescription}
           />
         </View>
       </View>

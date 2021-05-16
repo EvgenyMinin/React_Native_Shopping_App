@@ -3,8 +3,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Platform } from 'react-native';
 
 import MenuButton from '../../components/UI/MenuButton';
-import CreateButton from '../../components/UI/CreateButton';
 import SaveButton from '../../components/UI/SaveButton';
+import CreateButton from '../../components/UI/CreateButton';
 
 import UserProductsScreen from '../../screens/user/UserProductsScreen';
 
@@ -41,9 +41,8 @@ const AdminStack = () => {
       <AdminStackNavigator.Screen
         name="Edit Product"
         component={EditProductScreen}
-        options={({ navigation, route }) => ({
+        options={({ route }) => ({
           headerTitle: route.params.productId ? 'Edit Product' : 'Add Product',
-          headerRight: () => <SaveButton navigation={navigation} />,
         })}
       />
     </AdminStackNavigator.Navigator>
