@@ -13,7 +13,6 @@ const UserProductsScreen = ({ navigation }) => {
   const dispatch = useDispatch();
 
   const editProductHandler = (id) => {
-    console.log(`id`, id);
     navigation.navigate('Edit Product', { productId: id });
   };
 

@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, ScrollView, Text, TextInput, StyleSheet } from 'react-native';
+import {
+  View,
+  ScrollView,
+  Text,
+  TextInput,
+  StyleSheet,
+  Alert,
+} from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
 import SaveButton from '../../components/UI/SaveButton';
@@ -15,6 +22,9 @@ const EditProductScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
 
   const [title, setTitle] = useState(editedProduct ? editedProduct.title : '');
+  const [isValidTitle, setIsValidTitle] = useState(
+    editedProduct ? true : false
+  );
   const [imageUrl, setImageUrl] = useState(
     editedProduct ? editedProduct.imageUrl : ''
   );
@@ -24,6 +34,12 @@ const EditProductScreen = ({ navigation, route }) => {
   );
 
   const onSubmit = () => {
+    if (!isValidTitle) {
+      Alert.alert('Wrong input!', 'Please check the errors in the form.', [
+        { text: 'Okay' },
+      ]);
+      return;
+    }
     if (editedProduct) {
       dispatch(
         productsActions.updateProduct(productId, title, description, imageUrl)
@@ -34,6 +50,15 @@ const EditProductScreen = ({ navigation, route }) => {
       );
     }
     navigation.goBack();
+  };
+
+  const titleChangeHandler = (text) => {
+    if (text.trim().length === 0) {
+      setIsValidTitle(false);
+    } else {
+      setIsValidTitle(true);
+    }
+    setTitle(text);
   };
 
   useEffect(() => {
@@ -52,8 +77,9 @@ const EditProductScreen = ({ navigation, route }) => {
           <TextInput
             style={styles.input}
             value={title}
-            onChangeText={setTitle}
+            onChangeText={titleChangeHandler}
           />
+          {!isValidTitle && <Text>Please enter a valid title!</Text>}
         </View>
 
         <View style={styles.formControl}>
@@ -72,6 +98,7 @@ const EditProductScreen = ({ navigation, route }) => {
               style={styles.input}
               value={price}
               onChangeText={setPrice}
+              keyboardType="decimal-pad"
             />
           </View>
         )}
