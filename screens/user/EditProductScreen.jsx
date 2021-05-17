@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import {
   View,
   ScrollView,
@@ -13,6 +13,35 @@ import SaveButton from '../../components/UI/SaveButton';
 
 import * as productsActions from '../../store/actions/products';
 
+const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
+
+const formReducer = (state, action) => {
+  if (action.type === FORM_INPUT_UPDATE) {
+    const updatedValues = {
+      ...state.inputValues,
+      [action.input]: action.value,
+    };
+
+    const updatedValidities = {
+      ...state.inputValidities,
+      [action.input]: action.isValid,
+    };
+
+    let updatedFormIsValid = true;
+    for (const key in updatedValidities) {
+      updatedFormIsValid = updatedFormIsValid && updatedValidities[key];
+    }
+
+    return {
+      formIsValid: updatedFormIsValid,
+      inputValues: updatedValues,
+      inputValidities: updatedValidities,
+    };
+  }
+
+  return state;
+};
+
 const EditProductScreen = ({ navigation, route }) => {
   const { productId } = route.params;
   const editedProduct = useSelector((state) =>
@@ -21,20 +50,24 @@ const EditProductScreen = ({ navigation, route }) => {
 
   const dispatch = useDispatch();
 
-  const [title, setTitle] = useState(editedProduct ? editedProduct.title : '');
-  const [isValidTitle, setIsValidTitle] = useState(
-    editedProduct ? true : false
-  );
-  const [imageUrl, setImageUrl] = useState(
-    editedProduct ? editedProduct.imageUrl : ''
-  );
-  const [price, setPrice] = useState('');
-  const [description, setDescription] = useState(
-    editedProduct ? editedProduct.description : ''
-  );
+  const [formState, dispatchFormState] = useReducer(formReducer, {
+    inputValues: {
+      title: editedProduct ? editedProduct.title : '',
+      imageUrl: editedProduct ? editedProduct.imageUrl : '',
+      description: editedProduct ? editedProduct.description : '',
+      price: '',
+    },
+    inputValidities: {
+      title: editedProduct ? true : false,
+      imageUrl: editedProduct ? true : false,
+      description: editedProduct ? true : false,
+      price: editedProduct ? true : false,
+    },
+    formIsValid: editedProduct ? true : false,
+  });
 
   const onSubmit = () => {
-    if (!isValidTitle) {
+    if (!formState.formIsValid) {
       Alert.alert('Wrong input!', 'Please check the errors in the form.', [
         { text: 'Okay' },
       ]);
@@ -42,23 +75,37 @@ const EditProductScreen = ({ navigation, route }) => {
     }
     if (editedProduct) {
       dispatch(
-        productsActions.updateProduct(productId, title, description, imageUrl)
+        productsActions.updateProduct(
+          productId,
+          formState.inputValues.title,
+          formState.inputValues.description,
+          formState.inputValues.imageUrl
+        )
       );
     } else {
       dispatch(
-        productsActions.createProduct(title, imageUrl, +price, description)
+        productsActions.createProduct(
+          formState.inputValues.title,
+          formState.inputValues.imageUrl,
+          +formState.inputValues.price,
+          formState.inputValues.description
+        )
       );
     }
     navigation.goBack();
   };
 
-  const titleChangeHandler = (text) => {
-    if (text.trim().length === 0) {
-      setIsValidTitle(false);
-    } else {
-      setIsValidTitle(true);
+  const textChangeHandler = (inputId, text) => {
+    let isValid = false;
+    if (text.trim().length > 0) {
+      isValid = true;
     }
-    setTitle(text);
+    dispatchFormState({
+      type: FORM_INPUT_UPDATE,
+      value: text,
+      isValid: isValid,
+      input: inputId,
+    });
   };
 
   useEffect(() => {
@@ -67,7 +114,7 @@ const EditProductScreen = ({ navigation, route }) => {
         <SaveButton navigation={navigation} onSubmit={onSubmit} />
       ),
     });
-  }, [navigation, title, imageUrl, description, price]);
+  }, [navigation, formState]);
 
   return (
     <ScrollView>
@@ -76,18 +123,20 @@ const EditProductScreen = ({ navigation, route }) => {
           <Text style={styles.label}>Title</Text>
           <TextInput
             style={styles.input}
-            value={title}
-            onChangeText={titleChangeHandler}
+            value={formState.inputValues.title}
+            onChangeText={(text) => textChangeHandler('title', text)}
           />
-          {!isValidTitle && <Text>Please enter a valid title!</Text>}
+          {!formState.inputValues.title && (
+            <Text>Please enter a valid title!</Text>
+          )}
         </View>
 
         <View style={styles.formControl}>
           <Text style={styles.label}>Image URL</Text>
           <TextInput
             style={styles.input}
-            value={imageUrl}
-            onChangeText={setImageUrl}
+            value={formState.inputValues.imageUrl}
+            onChangeText={(text) => textChangeHandler('imageUrl', text)}
           />
         </View>
 
@@ -96,8 +145,8 @@ const EditProductScreen = ({ navigation, route }) => {
             <Text style={styles.label}>Price</Text>
             <TextInput
               style={styles.input}
-              value={price}
-              onChangeText={setPrice}
+              value={formState.inputValues.price}
+              onChangeText={(text) => textChangeHandler('price', text)}
               keyboardType="decimal-pad"
             />
           </View>
@@ -107,8 +156,8 @@ const EditProductScreen = ({ navigation, route }) => {
           <Text style={styles.label}>Description</Text>
           <TextInput
             style={styles.input}
-            value={description}
-            onChangeText={setDescription}
+            value={formState.inputValues.description}
+            onChangeText={(text) => textChangeHandler('description', text)}
           />
         </View>
       </View>
