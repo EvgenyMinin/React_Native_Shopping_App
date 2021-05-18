@@ -66,6 +66,10 @@ const EditProductScreen = ({ navigation, route }) => {
     formIsValid: editedProduct ? true : false,
   });
 
+  const {
+    inputValues: { title, imageUrl, description, price },
+  } = formState;
+
   const onSubmit = () => {
     if (!formState.formIsValid) {
       Alert.alert('Wrong input!', 'Please check the errors in the form.', [
@@ -75,21 +79,11 @@ const EditProductScreen = ({ navigation, route }) => {
     }
     if (editedProduct) {
       dispatch(
-        productsActions.updateProduct(
-          productId,
-          formState.inputValues.title,
-          formState.inputValues.description,
-          formState.inputValues.imageUrl
-        )
+        productsActions.updateProduct(productId, title, description, imageUrl)
       );
     } else {
       dispatch(
-        productsActions.createProduct(
-          formState.inputValues.title,
-          formState.inputValues.imageUrl,
-          +formState.inputValues.price,
-          formState.inputValues.description
-        )
+        productsActions.createProduct(title, imageUrl, +price, description)
       );
     }
     navigation.goBack();
@@ -123,10 +117,10 @@ const EditProductScreen = ({ navigation, route }) => {
           <Text style={styles.label}>Title</Text>
           <TextInput
             style={styles.input}
-            value={formState.inputValues.title}
+            value={title}
             onChangeText={(text) => textChangeHandler('title', text)}
           />
-          {!formState.inputValues.title && (
+          {!title && (
             <Text>Please enter a valid title!</Text>
           )}
         </View>
@@ -135,7 +129,7 @@ const EditProductScreen = ({ navigation, route }) => {
           <Text style={styles.label}>Image URL</Text>
           <TextInput
             style={styles.input}
-            value={formState.inputValues.imageUrl}
+            value={imageUrl}
             onChangeText={(text) => textChangeHandler('imageUrl', text)}
           />
         </View>
@@ -145,7 +139,7 @@ const EditProductScreen = ({ navigation, route }) => {
             <Text style={styles.label}>Price</Text>
             <TextInput
               style={styles.input}
-              value={formState.inputValues.price}
+              value={price}
               onChangeText={(text) => textChangeHandler('price', text)}
               keyboardType="decimal-pad"
             />
@@ -156,7 +150,7 @@ const EditProductScreen = ({ navigation, route }) => {
           <Text style={styles.label}>Description</Text>
           <TextInput
             style={styles.input}
-            value={formState.inputValues.description}
+            value={description}
             onChangeText={(text) => textChangeHandler('description', text)}
           />
         </View>
