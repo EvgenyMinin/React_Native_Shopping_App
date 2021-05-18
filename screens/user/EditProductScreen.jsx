@@ -10,6 +10,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 
 import SaveButton from '../../components/UI/SaveButton';
+import Input from '../../components/UI/Input';
 
 import * as productsActions from '../../store/actions/products';
 
@@ -113,47 +114,34 @@ const EditProductScreen = ({ navigation, route }) => {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <View style={styles.formControl}>
-          <Text style={styles.label}>Title</Text>
-          <TextInput
-            style={styles.input}
-            value={title}
-            onChangeText={(text) => textChangeHandler('title', text)}
-          />
-          {!title && (
-            <Text>Please enter a valid title!</Text>
-          )}
-        </View>
+        <Input
+          label="title"
+          errorText="Please enter a valid title!"
+          returnKeyType="next"
+        />
 
-        <View style={styles.formControl}>
-          <Text style={styles.label}>Image URL</Text>
-          <TextInput
-            style={styles.input}
-            value={imageUrl}
-            onChangeText={(text) => textChangeHandler('imageUrl', text)}
-          />
-        </View>
+        <Input
+          label="Image URL"
+          errorText="Please enter a valid image url!"
+          returnKeyType="next"
+        />
 
         {editedProduct ? null : (
-          <View style={styles.formControl}>
-            <Text style={styles.label}>Price</Text>
-            <TextInput
-              style={styles.input}
-              value={price}
-              onChangeText={(text) => textChangeHandler('price', text)}
-              keyboardType="decimal-pad"
-            />
-          </View>
+          <Input
+            label="Price"
+            errorText="Please enter a valid price!"
+            keyboardType="decimal-pad"
+            returnKeyType="next"
+          />
         )}
 
-        <View style={styles.formControl}>
-          <Text style={styles.label}>Description</Text>
-          <TextInput
-            style={styles.input}
-            value={description}
-            onChangeText={(text) => textChangeHandler('description', text)}
-          />
-        </View>
+        <Input
+          label="Description"
+          errorText="Please enter a valid description!"
+          keyboardType="decimal-pad"
+          multiline
+          numberOfLines={3}
+        />
       </View>
     </ScrollView>
   );
@@ -162,19 +150,6 @@ const EditProductScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-  },
-  formControl: {
-    width: '100%',
-  },
-  label: {
-    fontFamily: 'open-sans-bold',
-    marginVertical: 8,
-  },
-  input: {
-    paddingHorizontal: 2,
-    paddingVertical: 5,
-    borderBottomColor: '#ccc',
-    borderBottomWidth: 1,
   },
 });
 
