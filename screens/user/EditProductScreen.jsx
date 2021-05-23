@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useCallback, useEffect, useReducer } from 'react';
 import {
   View,
   ScrollView,
@@ -90,18 +90,17 @@ const EditProductScreen = ({ navigation, route }) => {
     navigation.goBack();
   };
 
-  const textChangeHandler = (inputId, text) => {
-    let isValid = false;
-    if (text.trim().length > 0) {
-      isValid = true;
-    }
-    dispatchFormState({
-      type: FORM_INPUT_UPDATE,
-      value: text,
-      isValid: isValid,
-      input: inputId,
-    });
-  };
+  const inputChangeHandler = useCallback(
+    (inputId, inputValue, inputValidity) => {
+      dispatchFormState({
+        type: FORM_INPUT_UPDATE,
+        value: inputValue,
+        isValid: inputValidity,
+        input: inputId,
+      });
+    },
+    [dispatchFormState]
+  );
 
   useEffect(() => {
     navigation.setOptions({
@@ -115,32 +114,52 @@ const EditProductScreen = ({ navigation, route }) => {
     <ScrollView>
       <View style={styles.container}>
         <Input
+          id="title"
           label="title"
           errorText="Please enter a valid title!"
           returnKeyType="next"
+          initialValue={editedProduct ? editedProduct.title : ''}
+          initialValid={!!editedProduct}
+          onInputChange={inputChangeHandler}
+          required
         />
 
         <Input
+          id="imageUrl"
           label="Image URL"
           errorText="Please enter a valid image url!"
           returnKeyType="next"
+          initialValue={editedProduct ? editedProduct.imageUrl : ''}
+          initialValid={!!editedProduct}
+          onInputChange={inputChangeHandler}
+          required
         />
 
         {editedProduct ? null : (
           <Input
+            id="price"
             label="Price"
             errorText="Please enter a valid price!"
             keyboardType="decimal-pad"
             returnKeyType="next"
+            onInputChange={inputChangeHandler}
+            required
+            min={0.1}
           />
         )}
 
         <Input
+        id="description"
           label="Description"
           errorText="Please enter a valid description!"
           keyboardType="decimal-pad"
           multiline
           numberOfLines={3}
+          initialValue={editedProduct ? editedProduct.description : ''}
+          initialValid={!!editedProduct}
+          onInputChange={() => inputChangeHandler('description')}
+          required
+          minLength={5}
         />
       </View>
     </ScrollView>
